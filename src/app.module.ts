@@ -15,7 +15,7 @@ import { PostagemModule } from './postagem/postagem.module';
       entities: [Postagem],
       synchronize: true,
     }),
-    PostagemModule
+    PostagemModule,
   ],
   controllers: [],
   providers: [],

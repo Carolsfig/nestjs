@@ -1,7 +1,8 @@
-import { Injectable } from "@nestjs/common";
-import { Repository } from "typeorm";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { ILike, Repository } from "typeorm";
 import { Postagem } from "../entities/postagem.entity";
 import { InjectRepository } from "@nestjs/typeorm";
+import { DeleteResult } from "typeorm/browser";
 
 @Injectable()   // Indica que a classe é de serviço e pode ser inserida/injetada em outras classes
 export class PostagemService {
@@ -12,10 +13,73 @@ export class PostagemService {
         private postagemRepository: Repository<Postagem>
     ) { }
 
+    // O InjectRepository permite que a classe repository acesse a classe Postagem e chame seus métodos.
+
     async findAll(): Promise<Postagem[]> {
 
-        return await this.postagemRepository.find()
+        return await this.postagemRepository.find();
     }
+
+    async findById(id: number): Promise<Postagem> {
+        const postagem = await this.postagemRepository.findOne({
+            where: { id }
+        })
+
+        if(!postagem){
+            throw new HttpException('Postagem não encontrada', HttpStatus.NOT_FOUND)
+        }
+
+        return postagem
+    }
+
+    async findByTitulo(titulo: string): Promise<Postagem[]> {
+        return await this.postagemRepository.find({
+            where: {
+                titulo: ILike(`%${titulo}%`)
+            }
+        })
+    }
+
+    async create(postagem: Postagem): Promise<Postagem> {
+        return await this.postagemRepository.save(postagem);
+    }
+
+    async update(postagem: Postagem): Promise<Postagem> {
+
+        let buscaPostagem = await this.findById(postagem.id);
+
+        if (!buscaPostagem || !postagem.id){
+            throw new HttpException('Postagem não encontrada!', HttpStatus.NOT_FOUND)
+        }
+
+        return await this.postagemRepository.save(postagem);
+    }
+
+    async delete(id: number): Promise<DeleteResult> {  // O DeleteResult confirma que foi excluído
+        let buscaPostagem = await this.findById(id);
+
+        if(!buscaPostagem)
+            throw new HttpException('Postagem não encontrada!', HttpStatus.NOT_FOUND);
+
+        return await this.postagemRepository.delete(id);
+    }
+    // SELECT * FROM tb_postagens WHERE titulo LIKE %cabana%
+
+    // Postagem Cabana
+    // Cabana de Férias
+    // SUL: Cabana Temática
+    // O ILike ignora letras maiusculas ou minusculas
+    // Quando dentro de %% a palavra pode estar no meio de frases e ser encontrada mesmo assim.
+
+
+    /* REPOSITORY<POSTAGEM>
+
+    find() => SELECT * FROM ??
+    create() => INSERT INTO ?? VALUES (,,,,)
+
+    findOne() => SELECT * FROM tb_postagens WHERE id = {id}
+    */
+
     /*
         private contaController: ContaController
 
