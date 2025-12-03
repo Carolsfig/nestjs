@@ -3,6 +3,7 @@ import { ILike, Repository } from "typeorm";
 import { Postagem } from "../entities/postagem.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeleteResult } from "typeorm/browser";
+import { TemaService } from "../../tema/services/tema.service";
 
 @Injectable()   // Indica que a classe é de serviço e pode ser inserida/injetada em outras classes
 export class PostagemService {
@@ -10,19 +11,29 @@ export class PostagemService {
     // Iniciando ferramentas para a classe de Serviço
     constructor(
         @InjectRepository(Postagem)  // Pode chamar os métodos de um Classe Repository
-        private postagemRepository: Repository<Postagem>
+        private postagemRepository: Repository<Postagem>,
+        private temaService: TemaService
     ) { }
 
     // O InjectRepository permite que a classe repository acesse a classe Postagem e chame seus métodos.
 
     async findAll(): Promise<Postagem[]> {
 
-        return await this.postagemRepository.find();
+        return await this.postagemRepository.find({
+            relations:{
+                tema: true
+            }
+        });
     }
 
     async findById(id: number): Promise<Postagem> {
         const postagem = await this.postagemRepository.findOne({
-            where: { id }
+             where: {
+                id
+            },
+            relations:{
+                tema: true
+            }
         })
 
         if(!postagem){
@@ -36,11 +47,17 @@ export class PostagemService {
         return await this.postagemRepository.find({
             where: {
                 titulo: ILike(`%${titulo}%`)
+            },
+            relations: {
+                tema: true
             }
         })
     }
 
     async create(postagem: Postagem): Promise<Postagem> {
+
+        await this.temaService.findById(postagem.tema.id)
+
         return await this.postagemRepository.save(postagem);
     }
 
@@ -50,6 +67,16 @@ export class PostagemService {
 
         if (!buscaPostagem || !postagem.id){
             throw new HttpException('Postagem não encontrada!', HttpStatus.NOT_FOUND)
+        }
+
+        if(postagem.tema) {
+            let tema = await this.temaService.findById(postagem.tema.id)
+
+            if(!tema){
+                throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
+            }
+
+            return await this.postagemRepository.save(postagem);
         }
 
         return await this.postagemRepository.save(postagem);
