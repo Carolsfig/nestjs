@@ -21,7 +21,8 @@ export class PostagemService {
 
         return await this.postagemRepository.find({
             relations:{
-                tema: true
+                tema: true,
+                usuario: true
             }
         });
     }
@@ -32,7 +33,8 @@ export class PostagemService {
                 id
             },
             relations:{
-                tema: true
+                tema: true,
+                usuario: true
             }
         })
 
@@ -49,7 +51,8 @@ export class PostagemService {
                 titulo: ILike(`%${titulo}%`)
             },
             relations: {
-                tema: true
+                tema: true,
+                usuario: true
             }
         })
     }
