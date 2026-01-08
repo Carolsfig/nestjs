@@ -1,26 +1,26 @@
-# Blog Pessoal – API REST 📝
+# Blog Pessoal – API REST
 
-API REST desenvolvida para um blog pessoal, com foco em boas práticas de backend, segurança, organização de código e arquitetura em camadas.
+API REST de um blog pessoal, desenvolvida com foco em boas práticas de backend, segurança e organização de código.
 
-O projeto simula um sistema completo de blog, incluindo autenticação, relacionamento entre entidades, testes automatizados e documentação da API.
+A aplicação permite o gerenciamento de Usuários, Postagens e Temas, com autenticação e controle de acesso via JWT.
 
-# 🚀 Funcionalidades
+## Funcionalidades
 
-CRUD completo das entidades
+CRUD completo de Usuário, Postagem e Tema
 
 Relacionamento entre entidades
 
 Autenticação e autorização via JWT
 
-Proteção de rotas
+Validação de dados
 
 Testes automatizados
 
-Documentação interativa da API
+Documentação da API com Swagger
 
-Deploy do backend em produção
+Deploy em produção
 
-# 🛠️ Tecnologias e conceitos aplicados
+## 🛠️ Tecnologias
 
 TypeScript
 
@@ -30,70 +30,31 @@ API REST
 
 Banco de dados SQL
 
-Autenticação com Token JWT
+JWT (JSON Web Token)
 
-Testes de software com Jest
+Jest
 
-Documentação com Swagger
+Swagger
 
-Deploy no Render
+Render
 
-# 🗂️ Estrutura do projeto
+## 🗂️ Arquitetura
 
-O projeto segue a arquitetura padrão do NestJS, utilizando:
+Projeto estruturado seguindo o padrão do NestJS, com separação de responsabilidades entre controllers, services, modules, entities e DTOs.
 
-Controllers
+## Autenticação
 
-Services
-
-Modules
-
-Entities
-
-DTOs
-
-Guards e Strategies para autenticação
-
-# 🔐 Autenticação
-
-A autenticação é feita via JWT (JSON Web Token).
-Após o login, o token deve ser enviado no header das requisições protegidas:
+As rotas protegidas exigem token JWT enviado no header:
 
 Authorization: Bearer <token>
 
-# 📄 Documentação da API (Swagger)
-
-A documentação da API está disponível via Swagger, permitindo visualizar e testar os endpoints diretamente pelo navegador.
-
-# 📌 Endpoint do Swagger:
-
-https://blogpessoal-5p60.onrender.com
-
-# 🧪 Testes
-
-Os testes automatizados foram desenvolvidos utilizando Jest, cobrindo as principais regras de negócio e garantindo maior confiabilidade da aplicação.
-
-# ☁️ Deploy
-
-O backend foi publicado em ambiente de produção utilizando a plataforma Render.
-
-📌 URL da API em produção: https://blogpessoal-5p60.onrender.com
-
-# ▶️ Como executar o projeto localmente
-Clone o repositório
-
-git clone https://github.com/seu-usuario/seu-repositorio.git
-
-Acesse a pasta do projeto
-
-cd blog-pessoal
-
-Instale as dependências
-
+## Execução local
+git clone https://github.com/Carolsfig/nestjs
+cd nestjs
 npm install
+npm run start:dev
 
-Configure as variáveis de ambiente (.env)
+## 📌 Objetivo
 
-Execute a aplicação
-
+Consolidar conhecimentos em desenvolvimento backend, modelagem de dados, autenticação, testes e documentação de APIs REST.
 npm run start:dev
